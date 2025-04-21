@@ -1,33 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-function TaskItem({ task, deleteTask, editTask }) {
+function TaskItem({ task, onDelete, onUpdate, toggleTask }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(task.title);
+  const [editedTitle, setEditedTitle] = useState(task.title);
 
-  function handleDelete() {
-    deleteTask(task.id);
-  }
+  const handleEditClick = () => setIsEditing(true);
 
-  function handleEdit() {
-    if (isEditing) {
-      editTask(task.id, { title: newTitle });
-    }
-    setIsEditing(!isEditing);
-  }
+  const handleChange = (e) => setEditedTitle(e.target.value);
+
+  const handleSave = () => {
+    onUpdate(task.id, { ...task, title: editedTitle });
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSave();
+  };
 
   return (
-    <div>
+    <div className="task-item">
+      <input
+        type="checkbox"
+        checked={task.completed}
+        onChange={() => toggleTask(task.id)}
+      />
       {isEditing ? (
         <input
           type="text"
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
+          value={editedTitle}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onBlur={handleSave}
+          autoFocus
         />
       ) : (
         <span>{task.title}</span>
       )}
-      <button onClick={handleEdit}>{isEditing ? 'Save' : 'Edit'}</button>
-      <button onClick={handleDelete}>Delete</button>
+      <div className="task-actions">
+        <button onClick={handleEditClick}>✏️</button>
+        <button onClick={() => onDelete(task.id)}>🗑️</button>
+      </div>
     </div>
   );
 }

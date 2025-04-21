@@ -12,15 +12,16 @@ function AddTaskForm({ addTask }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Add a new task"
-        value={taskTitle}
-        onChange={(e) => setTaskTitle(e.target.value)}
-      />
-      <button type="submit">Add Task</button>
-    </form>
+    <form onSubmit={handleSubmit} className="add-task-container">
+  <input
+    type="text"
+    placeholder="Add a new task"
+    value={taskTitle}
+    onChange={(e) => setTaskTitle(e.target.value)}
+  />
+  <button type="submit">Add Task</button>
+</form>
+
   );
 }
 
